@@ -1,7 +1,7 @@
 {
   "name": "dep-linker",
-  "version": "0.0.1",
-  "description": "Get the path for all your dependency files",
+  "version": "0.1.0",
+  "description": "Copy your npm dependencies to server them to the front-end.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,25 @@
     "fl-form": "^0.1.0",
     "jquery": "^2.2.3",
     "x-div": "^1.0.43"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fourlabsldn/dep-linker.git"
+  },
+  "keywords": [
+    "dependency",
+    "liker",
+    "dependencies",
+    "copy",
+    "serve",
+    "front",
+    "end",
+    "npm",
+    "node"
+  ],
+  "bugs": {
+    "url": "https://github.com/fourlabsldn/dep-linker/issues"
+  },
+  "homepage": "https://github.com/fourlabsldn/dep-linker#readme"
 }
