@@ -5,12 +5,12 @@ Copy your npm dependencies to server them to the front-end.
 Automatically copy your project's dependency files to a folder like `public/scripts`
 so that you can serve them to the front end.
 
-Install with:
+## Install
 ```
 npm install --save-dev dep-linker
 ```
 
-Example use:
+## Use
 ``` javascript
 
 var DepLinker = require('dep-linker');
