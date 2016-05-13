@@ -1,0 +1,19 @@
+{
+  "name": "dep-linker",
+  "version": "0.0.1",
+  "description": "Get the path for all your dependency files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lazamar @ FourLabs",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.5.5",
+    "bootstrap": "^3.3.6",
+    "fl-assert": "^1.0.0",
+    "fl-form": "^0.1.0",
+    "jquery": "^2.2.3",
+    "x-div": "^1.0.43"
+  }
+}
