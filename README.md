@@ -25,7 +25,7 @@ DepLinker.copyDependenciesTo('./public/scripts')
 
 ## Task runners
 There still isn't a specific wrapper for any task runner, but given that this
-is just javascript for now you can use it like this:
+is just javascript for now you can use it like this and it will work like a charm:
 ### Gulp
 ``` javascript
 var DepLinker = require('dep-linker');
@@ -38,8 +38,11 @@ gulp.task('copy-dependencies', function () {
 ``` javascript
 var DepLinker = require('dep-linker');
 
-grunt.task.registerTask('copy-dependencies', 'Copy npm dependencies', function() {
-  return DepLinker.copyDependenciesTo('./public/scripts');
+grunt.task.registerTask('copy-dependencies', 'Copy npm dependencies', function () {
+    var done = this.async(); // <-- must be async
+    return DepLinker.copyDependenciesTo('public/scripts')
+      .then(() => done())
+      .catch(() => done());
 });
 
 ```
