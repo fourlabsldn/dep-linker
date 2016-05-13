@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs.extra');
 
-class DepLinker {
+module.exports = class DepLinker {
   constructor(rootFolder) {
     this.packageJson = this.getPackageJson(rootFolder);
   }
@@ -61,42 +61,33 @@ class DepLinker {
       let depSource;
 
       // Specify source and destiny for dependency
-      const depDestinyFolder = path.join(dest, depName);
       const depFilePath = dependencies[depName];
       if (copyWholeFolder) {
-        depSource = path.dirname(depFilePath);
+        const depDestinyFolder = path.join(dest, depName);
         depDestiny = depDestinyFolder;
+        depSource = path.dirname(depFilePath);
       } else {
-        const depFileName = path.parse(depFilePath).base;
-        depDestiny = path.join(depDestinyFolder, depFileName);
+        depDestiny = path.format({
+          dir: dest,
+          name: depName,
+          ext: path.parse(depFilePath).ext,
+        });
         depSource = depFilePath;
       }
 
-      // Create needed directories and copy content
+      // Copy content
       const copyPromise = new Promise((resolve) => {
-          // Create directories
-          fs.mkdirpSync(depDestiny);
-          fs[copyFunction](
-            depSource,
-            depDestiny,
-            () => resolve(),
-            copyOptions
-          );
-        }
-      );
+        fs.mkdirpSync(dest);
+        fs[copyFunction](
+          depSource,
+          depDestiny,
+          () => resolve(),
+          copyOptions
+        );
+      });
       copyPromises.push(copyPromise);
     }
 
     return Promise.all(copyPromises);
   }
-}
-
-const depLinker = new DepLinker();
-console.log(depLinker.listDependencies());
-depLinker.copyDependenciesTo('./depTest')
-  .then(() => {
-    console.log('Finished.');
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+};
