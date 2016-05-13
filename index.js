@@ -3,12 +3,17 @@
 const path = require('path');
 const fs = require('fs.extra');
 
+let projectRoot = './';
+
 module.exports = class DepLinker {
-  constructor(rootFolder) {
-    this.packageJson = this.getPackageJson(rootFolder);
+  static setRoot(root) {
+    if (typeof root !== 'string') {
+      throw new Error(`Invalid path to root. Expected String, and received ${typeof root}`);
+    }
+    projectRoot = root;
   }
 
-  getPackageJson(root = '.') {
+  static getPackageJson(root = projectRoot) {
     const packagePath = path.join(root, 'package.json');
     let packageText;
     try {
@@ -26,8 +31,8 @@ module.exports = class DepLinker {
    * @method listDependencies
    * @return {Object} each key is a dependency name and each vaule the dep's filePath
    */
-  listDependencies() {
-    const packageJson = this.packageJson;
+  static listDependencies() {
+    const packageJson = DepLinker.getPackageJson();
     const dependencies = packageJson.dependencies;
 
     const depPaths = {};
@@ -46,12 +51,12 @@ module.exports = class DepLinker {
    * @param  {Boolean} copyWholeFolder - Whether to copy just the main file or everything
    * @return {Promise} - To be resolved when all files have been copied.
    */
-  copyDependenciesTo(dest, copyWholeFolder = false) {
+  static copyDependenciesTo(dest, copyWholeFolder = false) {
     if (typeof dest !== 'string') {
       throw new Error(`Not a valid destination folder: ${dest}`);
     }
 
-    const dependencies = this.listDependencies();
+    const dependencies = DepLinker.listDependencies();
     const copyPromises = [];
     const copyFunction = copyWholeFolder ? 'copyRecursive' : 'copy';
     const copyOptions = { replace: true };
