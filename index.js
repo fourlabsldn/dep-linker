@@ -21,6 +21,11 @@ class DepLinker {
     return packageJson;
   }
 
+  /**
+   * Returns an object with dependency names and their filePath
+   * @method listDependencies
+   * @return {Object} each key is a dependency name and each vaule the dep's filePath
+   */
   listDependencies() {
     const packageJson = this.packageJson;
     const dependencies = packageJson.dependencies;
@@ -28,8 +33,7 @@ class DepLinker {
     const depPaths = {};
     for (const depName of Object.keys(dependencies)) {
       const depFilePath = require.resolve(depName);
-      const depFolderPath = path.dirname(depFilePath);
-      depPaths[depName] = depFolderPath;
+      depPaths[depName] = depFilePath;
     }
 
     return depPaths;
@@ -37,28 +41,49 @@ class DepLinker {
 
   /**
    * Returns a promise to be resolved when all files have been copied.
+   * @method copyDependenciesTo
+   * @param  {String} dest - Folder where dependencies will go.
+   * @param  {Boolean} copyWholeFolder - Whether to copy just the main file or everything
+   * @return {Promise} - To be resolved when all files have been copied.
    */
-  copyDependenciesTo(dest) {
+  copyDependenciesTo(dest, copyWholeFolder = false) {
     if (typeof dest !== 'string') {
       throw new Error(`Not a valid destination folder: ${dest}`);
     }
 
     const dependencies = this.listDependencies();
     const copyPromises = [];
+    const copyFunction = copyWholeFolder ? 'copyRecursive' : 'copy';
+    const copyOptions = { replace: true };
 
     for (const depName of Object.keys(dependencies)) {
-      const depDestiny = path.join(dest, depName);
-      const depSource = dependencies[depName];
+      let depDestiny;
+      let depSource;
 
-      const copyPromise = new Promise(
-        (resolve) => { // eslint-disable-line no-loop-func
-          fs.copyRecursive(
+      // Specify source and destiny for dependency
+      const depDestinyFolder = path.join(dest, depName);
+      const depFilePath = dependencies[depName];
+      if (copyWholeFolder) {
+        depSource = path.dirname(depFilePath);
+        depDestiny = depDestinyFolder;
+      } else {
+        const depFileName = path.parse(depFilePath).base;
+        depDestiny = path.join(depDestinyFolder, depFileName);
+        depSource = depFilePath;
+      }
+
+      // Create needed directories and copy content
+      const copyPromise = new Promise((resolve) => {
+          // Create directories
+          fs.mkdirpSync(depDestiny);
+          fs[copyFunction](
             depSource,
             depDestiny,
             () => resolve(),
-            { replace: true }
+            copyOptions
           );
-      });
+        }
+      );
       copyPromises.push(copyPromise);
     }
 
@@ -67,6 +92,7 @@ class DepLinker {
 }
 
 const depLinker = new DepLinker();
+console.log(depLinker.listDependencies());
 depLinker.copyDependenciesTo('./depTest')
   .then(() => {
     console.log('Finished.');
