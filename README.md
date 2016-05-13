@@ -18,6 +18,30 @@ DepLinker.copyDependenciesTo('./public/scripts')
   .then(function () {
     console.log('Finished.');
   });
+
+  // Done! All your dependencies ready to be served to the front-end
+```
+*dev-dependencies are not copied*.
+
+## Task runners
+There still isn't a specific wrapper for any task runner, but given that this
+is just javascript for now you can use it like this:
+### Gulp
+``` javascript
+var DepLinker = require('dep-linker');
+
+gulp.task('copy-dependencies', function () {
+  return DepLinker.copyDependenciesTo('./public/scripts');
+});
+```
+### Grunt
+``` javascript
+var DepLinker = require('dep-linker');
+
+grunt.task.registerTask('copy-dependencies', 'Copy npm dependencies', function() {
+  return DepLinker.copyDependenciesTo('./public/scripts');
+});
+
 ```
 
 ## Options
@@ -43,7 +67,7 @@ dependency's main file folder like this:
 DepLinker.copyDependenciesTo('./public/scripts', true);
 ```
 
-And you will end up with a folder structure like this:
+You will end up with a folder structure like this:
 ```
 .
 ├── package.json
