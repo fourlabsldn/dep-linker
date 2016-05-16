@@ -1,6 +1,6 @@
 # Dependencies Linker
 
-Copy your npm dependencies to server them to the front-end.
+Copy your npm dependencies to serve them to the front-end.
 
 Automatically copy your project's dependency files to a folder like `public/scripts`
 so that you can serve them to the front end.
