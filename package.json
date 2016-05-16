@@ -1,6 +1,6 @@
 {
   "name": "dep-linker",
-  "version": "0.1.2",
+  "version": "0.1.21",
   "description": "Copy your npm dependencies to serve them to the front-end.",
   "main": "index.js",
   "scripts": {
