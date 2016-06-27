@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/fourlabsldn/dep-linker/issues"
   },
-  "homepage": "https://github.com/fourlabsldn/dep-linker#readme"
+  "homepage": "https://github.com/fourlabsldn/dep-linker#readme",
+   "engine": "node >= 6.0.0"
 }
