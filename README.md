@@ -13,8 +13,8 @@ npm install --save-dev dep-linker
 ## Use
 ``` javascript
 
-var DepLinker = require('dep-linker');
-DepLinker.copyDependenciesTo('./public/scripts')
+var depLinker = require('dep-linker');
+depLinker.copyDependenciesTo('./public/scripts')
   .then(function () {
     console.log('Finished.');
   });
@@ -28,19 +28,19 @@ There still isn't a specific wrapper for any task runner, but given that this
 is just javascript for now you can use it like this and it will work like a charm:
 ### Gulp
 ``` javascript
-var DepLinker = require('dep-linker');
+var depLinker = require('dep-linker');
 
 gulp.task('copy-dependencies', function () {
-  return DepLinker.copyDependenciesTo('./public/scripts');
+  return depLinker.copyDependenciesTo('./public/scripts');
 });
 ```
 ### Grunt
 ``` javascript
-var DepLinker = require('dep-linker');
+var depLinker = require('dep-linker');
 
 grunt.task.registerTask('copy-dependencies', 'Copy npm dependencies', function () {
     var done = this.async(); // <-- must be async
-    return DepLinker.copyDependenciesTo('public/scripts')
+    return depLinker.copyDependenciesTo('public/scripts')
       .then(() => done())
       .catch(() => done());
 });
@@ -67,7 +67,7 @@ so you have a structure that looks like this:
 You can set the `copyWholeFolder` flag to true and copy everything within the
 dependency's main file folder like this:
 ``` javascript
-DepLinker.copyDependenciesTo('./public/scripts', true);
+depLinker.copyDependenciesTo('./public/scripts', true);
 ```
 
 You will end up with a folder structure like this:
@@ -114,6 +114,6 @@ root folder. If the script is not being run from the root folder, specify the pa
 to it:
 
 ``` javascript
-var DepLinker = require('dep-linker');
-DepLinker.setRoot('../../');
+var depLinker = require('dep-linker');
+depLinker.setRoot('../../');
 ```
