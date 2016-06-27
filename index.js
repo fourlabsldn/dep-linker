@@ -38,8 +38,12 @@ module.exports = class DepLinker {
 
     const depPaths = {};
     for (const depName of Object.keys(dependencies)) {
-      const depFilePath = require.resolve(depName);
-      depPaths[depName] = depFilePath;
+      try {
+        const depFilePath = require.resolve(depName);
+        depPaths[depName] = depFilePath;
+      } catch (e) {
+        console.warn(`Could not resolve path to ${depName}`);
+      }
     }
 
     return depPaths;
