@@ -33,7 +33,7 @@ module.exports = class DepLinker {
    */
   static listDependencies() {
     const packageJson = DepLinker.getPackageJson();
-    const dependencies = packageJson.dependencies;
+    const dependencies = packageJson.dependencies || {};
 
     const depPaths = {};
     for (const depName of Object.keys(dependencies)) {
