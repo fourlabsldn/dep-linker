@@ -3,6 +3,7 @@
 
 const path = require('path');
 const fs = require('fs.extra');
+const isWin = process.platform === 'win32';
 
 class DepLinker {
   constructor() {
@@ -44,14 +45,26 @@ class DepLinker {
    * Returns a promise to be resolved when all files have been linked.
    * @method linkDependenciesTo
    * @param  {String} dest - Folder where dependencies will go.
+   * @param {Object} (Optional) Configuration options on how links will be created.
+   * The only options available are { type: 'junction' } or { type: 'dir'} when
+   * process.platform ==== 'win32'. Junctions have fewer  restrictions and are more 
+   * likely to succeed when running as a User. The default for type when running
+   * under Windows is Junction. 
    * @return {Promise} - To be resolved when all files have been copied.
    */
-  linkDependenciesTo(dest) {
+  linkDependenciesTo(dest, opts) {
     if (typeof dest !== 'string') {
       throw new Error(`Not a valid destination folder: ${dest}`);
     }
 
     const dependencies = this.listDependencies();
+
+    opts = opts || {};
+
+    // Only valid on win32
+    const linkTypeJunction = 'junction';
+    const linkTypeDir = 'dir';
+    const linkType = (isWin && opts.type !== 'dir') ? linkTypeJunction : linkTypeDir; 
 
     // Create all folders up to the destiny folder
     fs.mkdirpSync(dest);
@@ -64,7 +77,6 @@ class DepLinker {
 
       const linkSource = path.resolve(rLinkSource);
       const linkDestiny = path.resolve(rLinkDestiny);
-      const linkType = 'dir';
 
       // Link content
       const linking = new Promise((resolve) => { // Check if file exists
@@ -83,6 +95,10 @@ class DepLinker {
         if (err) { console.log(err); }
       })
       .then(() => new Promise((resolve) => { // Create simbolic link
+
+        // In the future it is possible to utilize the 'runas' module 
+        // to ShellExec this command with the Verb: RunAs under Windows. The
+        // ideal scenario would be for the task to prompt the user for credentials. 
         fs.symlink(linkSource, linkDestiny, linkType, resolve);
       }))
       .then((err) => {  // Report on errors
