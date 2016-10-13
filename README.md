@@ -1,5 +1,9 @@
 # Dependencies Linker
 
+[![npm](https://img.shields.io/npm/v/dep-linker.svg?maxAge=2592000)](https://www.npmjs.com/package/dep-linker)
+[![npm](https://img.shields.io/npm/dt/dep-linker.svg?maxAge=2592000)](https://www.npmjs.com/package/dep-linker)
+[![npm](https://img.shields.io/npm/l/express.svg?maxAge=2592000)](https://www.npmjs.com/package/dep-linker)
+
 Link your npm dependencies to serve them to the front-end.
 
 Automatically link your project's dependency files to a folder like `public/scripts`
