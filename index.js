@@ -2,7 +2,7 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs.extra');
+const fs = require('fs-extra');
 const isWin = process.platform === 'win32';
 
 class DepLinker {
@@ -99,7 +99,7 @@ class DepLinker {
         // In the future it is possible to utilize the 'runas' module 
         // to ShellExec this command with the Verb: RunAs under Windows. The
         // ideal scenario would be for the task to prompt the user for credentials. 
-        fs.symlink(linkSource, linkDestiny, linkType, resolve);
+        fs.ensureSymlink(linkSource, linkDestiny, linkType, resolve);
       }))
       .then((err) => {  // Report on errors
         if (err) { console.log(err); }
